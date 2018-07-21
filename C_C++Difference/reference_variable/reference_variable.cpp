@@ -28,8 +28,11 @@ void DemoReferenceVariable()
     //int &refC = 10
 	const int &refConst = 10;
     static int &staticRef = refNo1;
-    int *ptr;
-    int &refPtr = ptr;
+    int *ptr = &no1;
+    int* &refPtr = ptr;
+    std::cout<<&refPtr<<":"<<&ptr<<std::endl;
+    *refPtr = 200;
+    std::cout<<*refPtr<<":"<<*ptr<<std::endl;
 }
 
 int main()
