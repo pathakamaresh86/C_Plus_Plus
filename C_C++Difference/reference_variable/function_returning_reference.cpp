@@ -5,6 +5,7 @@ int& FunctionReturningReference(int &param)
     int i = param;
 	param = 40;
 	return param;
+    //function_returning_reference.cpp:5:9: warning: reference to local variable ‘i’ returned [-Wreturn-local-addr]
     //return i;
 }
 
