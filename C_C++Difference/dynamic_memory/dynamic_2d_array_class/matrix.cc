@@ -15,6 +15,7 @@ Matrix::Matrix(const int rows, const int cols)
     iRows = rows;
     iCols = cols;
     */
+    std::cout<<"Matrix::Matrix\n";
     matrix = new int*[rows];
     for(int i = 0 ; i < rows ; i++)
         matrix[i] = new int[cols];
@@ -31,11 +32,13 @@ Matrix::Matrix(const int rows, const int cols)
     Compiler Provided Copy Constructor Performs Shallow copy.
     When to write user-defined Copy Constructor ?
     - when object refers to some resources which are dynamically allocated or referring to some other memory areas.
+    iii) Compiler provides default assignment operator.
  */
 Matrix::Matrix(const Matrix& existingMatrix)
     : iRows(existingMatrix.iRows), iCols(existingMatrix.iCols)
 {
     //this : constant reference to calling object
+    std::cout<<"Matrix Copy Constructor\n";
     this->matrix = new int*[iRows];
     for(int i = 0 ; i < iRows ; i++)
         this->matrix[i] = new int[iCols];
@@ -46,6 +49,7 @@ Matrix::Matrix(const Matrix& existingMatrix)
 }//copy constructor
 Matrix::~Matrix()
 {
+    std::cout<<"Matrix::~Matrix\n";
     if(matrix)
     {
         for(int i = 0 ; i < iRows  ; i++)
@@ -56,8 +60,89 @@ Matrix::~Matrix()
 }//de-allocate
     
 //Please implement all the below methods
-void Matrix::Accept(){}
-void Matrix::Display(){}
-Matrix Matrix::Add(const Matrix &m2){}
-Matrix Matrix::Sub(const Matrix &m2){}
-Matrix Matrix::Multiply(const Matrix &m2){}
+void Matrix::Accept()
+{
+    std::cout<<"Matrix::Accept\n";
+}
+void Matrix::Display()
+{
+    std::cout<<"Matrix::Display\n";
+}
+Matrix Matrix::Add(const Matrix &m2) const
+{
+    std::cout<<"Matrix::Add\n";
+    return Matrix(m2.iRows, m2.iCols);
+}
+Matrix Matrix::Sub(const Matrix &m2) const
+{
+    std::cout<<"Matrix::Sub\n";
+    return Matrix(m2.iRows, m2.iCols);
+}
+Matrix Matrix::Multiply(const Matrix &m2) const
+{
+    std::cout<<"Matrix::Multiply\n";
+    return Matrix(m2.iRows, m2.iCols);
+}
+Matrix& Matrix::operator=(const Matrix& m2)
+{
+    std::cout<<"Matrix::operator=\n";
+    if(this->iRows != m2.iRows || this->iCols != m2.iCols)
+    {
+        //TBD
+        //free this->matrix and allocate again with m2.iRows and m2.iCols. 
+    }
+    this->iRows = m2.iRows;
+    this->iCols = m2.iCols;
+    for(int i = 0 ; i < m2.iRows ; i++)
+        for(int j = 0 ; j < m2.iCols ; j++)
+            this->matrix[i][j] = m2.matrix[i][j];
+
+    return *this;
+}
+Matrix Matrix::operator+(const Matrix& m2) const
+{
+    std::cout<<"Matrix::operator+\n";
+    return Add(m2);
+}
+Matrix Matrix::operator-(const Matrix& m2) const
+{
+    std::cout<<"Matrix::operator-\n";
+    return Sub(m2);
+}
+Matrix Matrix::operator+=(const Matrix& m2)
+{
+    std::cout<<"Matrix::operator+=\n";
+    Matrix m3 = Add(m2);
+    
+    for(int i = 0 ; i < m3.iRows ; i++)
+        for(int j = 0 ; j < m3.iCols ; j++)
+            this->matrix[i][j] = m3.matrix[i][j];
+    
+    return *this;
+}
+//provide operator overloaded multiply method
+int main()
+{
+    Matrix m1(3, 3);
+    m1.Accept();
+    Matrix m2(m1);
+    
+    m1.Display();
+    m2.Display();
+
+    Matrix m3 = m1.Add(m2);
+    m3.Display();
+    //assignment
+    std::cout<<"Assignment Operator\n";
+    m3 = m2;
+    //+
+    std::cout<<"+ Operator & Copy Constructor(expected but optimized by compiler where m4 is passed as a reference to add and new object creation directly happens for m4 hence no copy constructor invocation is seen\n";
+    Matrix m4(m1 + m2);
+    // - & assignment
+    std::cout<<"- Operator & Assignment Operator\n";
+    m4 = m1 - m2;
+   //+=
+    std::cout<<"+= Operator\n";
+    m4 += m1;
+    return 0;
+}
