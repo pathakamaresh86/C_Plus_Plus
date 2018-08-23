@@ -30,8 +30,12 @@ int main()
     //In Below Lambda Function all the arguments passed by reference to it hence accessing and updation work's fine.
     for_each(begin(v), end(v), [&](int x){if (x%mul) { sum+=x;}});
     std::cout<<"Sum of Numbers Using Lambda, passing all arguments by reference:"<<sum<<endl;
-    //In Below Lambda Function all arguments will be passed by value (constant) hence any modification won't work.
-    //for_each(begin(v), end(v), [=](int x){if (x%mul) { sum+=x;}}); //error doesn't work as sum is read only.
+    
+    //In Below Lambda Function all arguments will be passed by value and as mutable is specified it allows changing the variables passed by value 
+    //but the original variables remain unchanged.
+    sum = 0;
+    for_each(begin(v), end(v), [=](int x) mutable {if (x%mul) { sum+=x;}});
+    std::cout<<"Sum of Numbers Using Lambda, passing all arguments by value and specifying mutable:"<<sum<<endl;
 
     //selectively passing sum as reference and others by value.
     sum = 0;
